@@ -1,8 +1,11 @@
-# The Adityya Special - ROS 2 with MAVROS
+# Airside SLAM System (Docker)
 
 The Docker setup provides:
 
-- ROS 2 Jazzy (desktop)
+- ROS 2 Jazzy
+- MAVROS
+- Cartographer
+- sf45b drivers
 
 ## Build the image
 
