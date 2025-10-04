@@ -27,6 +27,18 @@ sudo ./docker/attach.sh
 ## Run SLAM commands
 
 ```sh
+cd /workspace/ros2_ws
+
+rm -rf build install log
+
+colcon build
+
+source install/setup.bash
+
+ros2 launch slam slam_launch.py
+
+# OR
+
 ./sf45b
 
 ros2 run tf2_ros static_transform_publisher 0 0 0 0 0 0 laser laser_frame
