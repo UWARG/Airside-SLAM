@@ -28,7 +28,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'scan_mavlink_bridge = slam.scan_mavlink_bridge:main'
+            'scan_mavlink_bridge = slam.scan_mavlink_bridge:main',
+            'odom_mavlink_bridge = slam.odom_mavlink_bridge:main'
         ],
     },
 )
