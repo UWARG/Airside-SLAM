@@ -1,5 +1,8 @@
 # Airside SLAM System (Docker)
 
+> [!NOTE]
+> Please make sure to create a new branch instead of forking the repo when working on new tasks.
+
 The Docker setup provides:
 
 - ROS 2 Jazzy
