@@ -26,7 +26,7 @@ DOCKER_ARGS=(
     --volume "$(pwd):/workspace"
 )
 
-SERIAL_GLOBS=(/dev/ttyAMA0 /dev/serial0 /dev/ttyS0 /dev/ttyUSB* /dev/ttyACM*)
+SERIAL_GLOBS=(/dev/cu.usbmodem* /dev/ttyAMA0 /dev/serial0 /dev/ttyS0 /dev/ttyUSB* /dev/ttyACM*)
 for glob in "${SERIAL_GLOBS[@]}"; do
     for dev in $glob; do
         if [ -e "$dev" ]; then

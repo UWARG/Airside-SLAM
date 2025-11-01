@@ -80,7 +80,7 @@ RUN bash -lc 'if [ -d /workspace/ros2_ws/src ]; then cd /workspace/ros2_ws; colc
 RUN bash -lc "source /opt/ros/${ROS_DISTRO}/setup.bash && \
     git clone https://github.com/LightWare-Optoelectronics/lightwarelidar2 /opt/sf45-driver"
 
-ARG LIDAR_PORT=/dev/ttyAMA0
+ARG LIDAR_PORT=/dev/cu.usbmodem38S45_158681
 ARG LIDAR_RANGE=320
 
 RUN bash -lc "source /opt/ros/${ROS_DISTRO}/setup.bash && \
@@ -92,7 +92,9 @@ RUN bash -lc "source /opt/ros/${ROS_DISTRO}/setup.bash && \
     sed -i \"s|params.highAngleLimit = node->declare_parameter<int32_t>(\\\"highAngleLimit\\\", 45.0f);|params.highAngleLimit = node->declare_parameter<int32_t>(\\\"highAngleLimit\\\", \$HIGH_ANGLE);|\" src/sf45b.cpp && \
     sed -i \"s|params.lowAngleLimit = node->declare_parameter<int32_t>(\\\"lowAngleLimit\\\", -45.0f);|params.lowAngleLimit = node->declare_parameter<int32_t>(\\\"lowAngleLimit\\\", \$LOW_ANGLE);|\" src/sf45b.cpp && \
     mkdir -p build && cd build && \
-    cmake .. && cmake --build . --parallel $(nproc)"
+    cmake .. && cmake --build . --parallel $(nproc) && \
+    cp -a /opt/sf45-driver /workspace/ && \
+    chown -R ${USERNAME}:${USERNAME} /workspace/sf45-driver"
 
 ENV QT_X11_NO_MITSHM=1
 

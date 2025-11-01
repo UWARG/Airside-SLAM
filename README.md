@@ -21,10 +21,17 @@ The Docker setup provides:
 ```sh
 # Run first terminal
 sudo ./docker/run.sh
-
+# or
+docker run --rm -it \ 
+--privileged \ 
+--device /dev/cu.usbmodem38S45_15868 \ 
+ros-ws
 
 # Run more terminals
 sudo ./docker/attach.sh
+
+# Clear all cache
+docker buildx prune --all
 ```
 
 ## Run SLAM commands
@@ -52,3 +59,27 @@ ros2 run cartographer_ros cartographer_occupancy_grid_node -resolution 0.05 -pub
 
 rviz2
 ```
+
+## RUN mirror-pixhawk commands
+
+```sh
+cd ros2_ws
+
+rm -rf build install log
+
+# if not on docker (local)
+source /opt/ros/jazzy/setup.bash
+
+# should not be needed (this should have already been configured when setting up workspace)
+rosdep install -i --from-path src --rosdistro jazzy -y --skip-keys "ament_cmake ament_python"
+
+colcon build
+# if multiple packages exist, use:
+colcon build --packages-select mirror_pixhawk
+
+source install/local_setup.bash
+
+# node name (currently scan) can be changed in setup.py
+ros2 run mirror_pixhawk scan
+```
+
