@@ -36,6 +36,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxkbcommon-x11-0 \
     python3-tk \
     geographiclib-tools \
+    python3 \ 
+    python3-venv \
     && rm -rf /var/lib/apt/lists/*
 
 RUN geographiclib-get-geoids best && geographiclib-get-gravity egm96 && geographiclib-get-magnetic emm2015
@@ -101,6 +103,13 @@ WORKDIR /workspace
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /root/.bashrc \
  && echo "[ -f /workspace/install/setup.bash ] && source /workspace/install/setup.bash" >> /root/.bashrc \
  && chown ${USERNAME}:${USERNAME} /root/.bashrc
+
+ENV VIRTUAL_ENV=/opt/venv
+RUN python3 -m venv $VIRTUAL_ENV --system-site-packages
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+# Install dependencies:
+RUN pip install pymavlink pyserial
 
 USER ${USERNAME}
 
