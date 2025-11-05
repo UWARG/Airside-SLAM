@@ -82,17 +82,8 @@ RUN bash -lc 'if [ -d /workspace/ros2_ws/src ]; then cd /workspace/ros2_ws; colc
 RUN bash -lc "source /opt/ros/${ROS_DISTRO}/setup.bash && \
     git clone https://github.com/LightWare-Optoelectronics/lightwarelidar2 /opt/sf45-driver"
 
-ARG LIDAR_PORT=/dev/ttyAMA0
-ARG LIDAR_RANGE=320
-
 RUN bash -lc "source /opt/ros/${ROS_DISTRO}/setup.bash && \
     cd /opt/sf45-driver && \
-    sed -i 's|std::string portName = node->declare_parameter<std::string>(\"port\", \"/dev/ttyUSB0\");|std::string portName = node->declare_parameter<std::string>(\"port\", \"${LIDAR_PORT}\");|' src/sf45b.cpp && \
-    HALF_RANGE=\$((${LIDAR_RANGE} / 2)) && \
-    HIGH_ANGLE=\$HALF_RANGE && \
-    LOW_ANGLE=\$((-\$HALF_RANGE)) && \
-    sed -i \"s|params.highAngleLimit = node->declare_parameter<int32_t>(\\\"highAngleLimit\\\", 45.0f);|params.highAngleLimit = node->declare_parameter<int32_t>(\\\"highAngleLimit\\\", \$HIGH_ANGLE);|\" src/sf45b.cpp && \
-    sed -i \"s|params.lowAngleLimit = node->declare_parameter<int32_t>(\\\"lowAngleLimit\\\", -45.0f);|params.lowAngleLimit = node->declare_parameter<int32_t>(\\\"lowAngleLimit\\\", \$LOW_ANGLE);|\" src/sf45b.cpp && \
     mkdir -p build && cd build && \
     cmake .. && cmake --build . --parallel $(nproc)"
 
