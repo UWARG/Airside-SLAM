@@ -9,6 +9,24 @@ import os
 
 
 def generate_launch_description():
+    lidar_port_arg = DeclareLaunchArgument(
+        'lidar_port',
+        default_value='/dev/ttyUSB0',
+        description='Port for SF45B LiDAR'
+    )
+    
+    high_angle_limit_arg = DeclareLaunchArgument(
+        'high_angle_limit',
+        default_value='160',
+        description='High angle limit in degrees (positive)'
+    )
+    
+    low_angle_limit_arg = DeclareLaunchArgument(
+        'low_angle_limit',
+        default_value='-160',
+        description='Low angle limit in degrees (negative)'
+    )
+
     provide_odom_frame_arg = DeclareLaunchArgument(
         'provide_odom_frame',
         default_value='false',
@@ -37,11 +55,16 @@ def generate_launch_description():
     
     config_dir = PathJoinSubstitution([slam_package_dir, 'config'])
 
-    # SF45B driver process
-    sf45b_process = ExecuteProcess(
-        cmd=['./sf45b'],
-        cwd='/workspace',
+    # SF45B driver node
+    sf45b_node = Node(
+        package='sf45b',
+        executable='sf45b',
         name='sf45b_driver',
+        parameters=[{
+            'port': LaunchConfiguration('lidar_port'),
+            'highAngleLimit': LaunchConfiguration('high_angle_limit'),
+            'lowAngleLimit': LaunchConfiguration('low_angle_limit')
+        }],
         output='screen'
     )
 
@@ -92,11 +115,14 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        lidar_port_arg,
+        high_angle_limit_arg,
+        low_angle_limit_arg,
         provide_odom_frame_arg,
         expected_sensor_ids_arg,
         resolution_arg,
         publish_period_arg,
-        sf45b_process,
+        sf45b_node,
         static_transform_publisher,
         cartographer_node,
         occupancy_grid_node,
