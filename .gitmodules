@@ -1,0 +1,9 @@
+[submodule "VINS-Fusion"]
+	path = VINS-Fusion
+	url = https://github.com/chobitsfan/VINS-Fusion.git
+[submodule "oak_d_vins_cpp"]
+	path = oak_d_vins_cpp
+	url = https://github.com/chobitsfan/oak_d_vins_cpp.git
+[submodule "mavlink-udp-proxy"]
+	path = mavlink-udp-proxy
+	url = https://github.com/chobitsfan/mavlink-udp-proxy.git
