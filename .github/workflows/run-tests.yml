@@ -1,7 +1,7 @@
 # This workflow will run tests and linters with PyTest using Python 3.11
 # For more information see: https://docs.github.com/en/actions/about-github-actions
 
-name: Run tests
+name: Run linter and docker tests
 
 on:
   push:
@@ -46,3 +46,11 @@ jobs:
       # Tests if Docker builds
       - name: Docker build
         run: docker build -f docker/Dockerfile -t temp-ci:latest docker/
+      
+      - name: Colcon build (for the ros2 nodes)
+        run: |
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE/ros2_ws:/ros2_ws" \
+            -w /ros2_ws \
+            temp-ci:latest \
+            bash -lc 'source /opt/ros/jazzy/setup.bash && colcon build --event-handlers console_cohesion+'
