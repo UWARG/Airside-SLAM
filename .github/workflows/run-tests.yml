@@ -42,3 +42,7 @@ jobs:
       # Run unit tests with PyTest
       - name: Run unit tests
         run: pytest -vv
+
+      # Tests if Docker builds
+      - name: Docker build
+        run: docker build -f docker/Dockerfile -t temp-ci:latest docker/
