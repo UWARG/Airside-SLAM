@@ -1,0 +1,56 @@
+# This workflow will run tests and linters with PyTest using Python 3.11
+# For more information see: https://docs.github.com/en/actions/about-github-actions
+
+name: Run linter and docker tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      # Set Python version
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      # Install tools
+      - name: Install tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install black flake8 pylint pytest pytest-cov
+        
+      # Run linters and formatters
+      - name: Linters and formatters
+        run: |
+          black --check .
+          flake8 .
+          pylint .
+
+      # Run unit tests with PyTest
+      - name: Run unit tests
+        run: pytest -vv
+
+      # Tests if Docker builds
+      - name: Docker build
+        run: docker build -f docker/Dockerfile -t temp-ci:latest docker/
+      
+      - name: Colcon build (for the ros2 nodes)
+        run: |
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE/ros2_ws:/ros2_ws" \
+            -w /ros2_ws \
+            temp-ci:latest \
+            bash -lc 'source /opt/ros/jazzy/setup.bash && colcon build --event-handlers console_cohesion+'
