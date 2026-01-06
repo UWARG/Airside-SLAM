@@ -13,7 +13,7 @@ class DroneConnection:
         drone.wait_heartbeat()
         print("Heartbeat from drone successfully received")
 
-        return DroneConnection(cls.__create_key, drone)
+        return True, DroneConnection(drone)
 
     def send_odometry(self, x, y, z, q, vx, vy, vz, angular_vx, angular_vy, angular_vz):
         """
