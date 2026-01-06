@@ -3,6 +3,14 @@ import depthai as dai
 import numpy as np
 
 USE_RERUN = False
+USE_MAVLINK = True
+
+if USE_MAVLINK:
+    from drone_connection import DroneConnection
+    success, drone_connection = DroneConnection.create()
+    if not success:
+        print("Failed to connect to drone")
+        exit(1)
 
 if USE_RERUN:
     from rerun_node import RerunNode
@@ -69,4 +77,27 @@ with dai.Pipeline() as p:
             print(slamData.getTranslation().y)
             print(slamData.getTranslation().z)
             print(slamData.getQuaternion().qx)
+
+            if USE_MAVLINK:
+                x = slamData.getTranslation().x
+                y = slamData.getTranslation().y
+                z = slamData.getTranslation().z
+                qw = slamData.getQuaternion().qw
+                qx = slamData.getQuaternion().qx
+                qy = slamData.getQuaternion().qy
+                qz = slamData.getQuaternion().qz
+                # TODO: Do these please
+                vx = 0.0
+                vy = 0.0
+                vz = 0.0
+                angular_vx = 0.0
+                angular_vy = 0.0
+                angular_vz = 0.0
+
+                drone_connection.send_odometry(
+                    x, y, z,
+                    [qw, qx, qy, qz],
+                    vx, vy, vz,
+                    angular_vx, angular_vy, angular_vz
+                )
         time.sleep(0.1)
