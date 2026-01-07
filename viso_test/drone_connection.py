@@ -43,5 +43,6 @@ class DroneConnection:
             angular_vz,         # angular_vz (float, rad/s)
             [0.0]*21,           # pose_covariance (float[21], leave as zeros if unused)
             [0.0]*21,           # velocity_covariance (float[21], leave as zeros if unused)
-            0                   # reset_counter (uint8_t, 0 for no reset)
+            0,                  # reset_counter (uint8_t, 0 for no reset)
+            mavutil.mavlink.MAV_ESTIMATOR_TYPE_VIO # estimator type
         )
