@@ -5,7 +5,6 @@ from launch.actions import ExecuteProcess, DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-import os
 
 
 def generate_launch_description():
@@ -22,7 +21,9 @@ def generate_launch_description():
     )
 
     resolution_arg = DeclareLaunchArgument(
-        "resolution", default_value="0.05", description="Resolution for occupancy grid"
+        "resolution",
+        default_value="0.05",
+        description="Resolution for occupancy grid",
     )
 
     publish_period_arg = DeclareLaunchArgument(
@@ -83,7 +84,12 @@ def generate_launch_description():
     )
 
     # RViz2 node
-    rviz_node = Node(package="rviz2", executable="rviz2", name="rviz2", output="screen")
+    rviz_node = Node(
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
+        output="screen",
+    )
 
     return LaunchDescription(
         [

@@ -36,7 +36,7 @@ jobs:
       - name: Linters and formatters
         run: |
           black --check .
-          flake8 .
+          flake8 . --max-line-length=140
           pylint .
 
       # Run unit tests with PyTest
