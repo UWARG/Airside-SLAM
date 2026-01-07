@@ -9,7 +9,7 @@ class DroneConnection:
 
     @classmethod
     def create(cls, address:str = "/dev/ttyAMA0", baud: int = 57600) -> "tuple[bool, DroneConnection | None]":
-        drone = mavutil.mavlink_connection(address, baud=baud)
+        drone = mavutil.mavlink_connection(address, baud=baud, source_component=191, source_system=1)
         drone.wait_heartbeat()
         print("Heartbeat from drone successfully received")
 
