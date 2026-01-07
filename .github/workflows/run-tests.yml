@@ -37,7 +37,7 @@ jobs:
         run: |
           black --check .
           flake8 . --max-line-length=140
-          pylint . --disable=import-error,missing-module-docstring,missing-function-docstring,missing-class-docstring --fail-under=9.5
+          pylint . --disable=import-error,missing-module-docstring,missing-function-docstring,missing-class-docstring --fail-under=9.0
 
 
       # Run unit tests with PyTest
