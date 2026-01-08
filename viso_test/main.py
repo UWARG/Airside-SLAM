@@ -67,6 +67,9 @@ with dai.Pipeline() as p:
 
     slamQueue = slam.transform.createOutputQueue(maxSize=4, blocking=False)
     p.start()
+    if USE_MAVLINK and drone_connection is not None:
+        drone_connection.init_position()
+
     while p.isRunning():
         slamData = slamQueue.tryGet()
         if slamData is not None:

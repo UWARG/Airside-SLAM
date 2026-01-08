@@ -26,7 +26,7 @@ class DroneConnection:
         :param vx, vy, vz: Linear velocity in m/s.
         :param angular_vx, angular_vy, angular_vz: Angular velocity in rad/s.
         """
-        frame_id = mavutil.mavlink.MAV_FRAME_LOCAL_NED
+        frame_id = mavutil.mavlink.MAV_FRAME_VISION_NED
         child_frame_id = mavutil.mavlink.MAV_FRAME_BODY_FRD # often used for velocity estimates
 
         time_usec = int(time.time() * 1e6)
@@ -59,4 +59,28 @@ class DroneConnection:
             # End of velocity covariance matrix
             0,                  # reset_counter (uint8_t, 0 for no reset)
             mavutil.mavlink.MAV_ESTIMATOR_TYPE_VIO # estimator type
+        )
+
+    def init_position(self):
+        """
+        Function for positions that need to be sent at the start of the script
+        """
+        self.drone.mav.set_gps_global_origin_send(
+            target_system=1,
+            latitude=0,
+            longitude=0,
+            altitude=0
+        )
+        self.drone.mav.set_home_position_send(
+            target_system=1,
+            latitude=0,
+            longitude=0,
+            altitude=0,
+            x=0,
+            y=0,
+            z=0,
+            q = [1,0,0,0],
+            approach_x=0,
+            approach_y=0,
+            approach_z=1,
         )
