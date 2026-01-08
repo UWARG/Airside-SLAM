@@ -67,14 +67,14 @@ class DroneConnection:
         """
         self.drone.mav.set_gps_global_origin_send(
             target_system=1,
-            latitude=0,
-            longitude=0,
+            latitude=43.5,
+            longitude=80.5,
             altitude=0
         )
         self.drone.mav.set_home_position_send(
             target_system=1,
-            latitude=0,
-            longitude=0,
+            latitude=43.5,
+            longitude=80.5,
             altitude=0,
             x=0,
             y=0,
