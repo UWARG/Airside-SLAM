@@ -66,9 +66,12 @@ with dai.Pipeline() as p:
         slam.groundPCL.link(rerunViewer.inputGroundPCL)
 
     slamQueue = slam.transform.createOutputQueue(maxSize=4, blocking=False)
+    imuQueue = imu.out.createOutputQueue(maxSize=4, blocking=False)
+
     p.start()
     if USE_MAVLINK and drone_connection is not None:
         drone_connection.init_position()
+
 
     while p.isRunning():
         slamData = slamQueue.tryGet()
@@ -97,10 +100,20 @@ with dai.Pipeline() as p:
                 angular_vy = 0.0
                 angular_vz = 0.0
 
+                imuData = imuQueue.tryGet()
+                if imuData is not None:
+                    gyro = imuData.packets[-1].gyroscope
+                    rollspeed = gyro.x 
+                    pitchspeed = gyro.y 
+                    yawspeed = gyro.z
+                else:
+                    rollspeed = yawspeed = pitchspeed = 0
+
                 drone_connection.send_odometry(
                     x, y, z,
                     [qw, qx, qy, qz],
                     vx, vy, vz,
-                    angular_vx, angular_vy, angular_vz
+                    angular_vx, angular_vy, angular_vz,
+                    rollspeed, pitchspeed, yawspeed
                 )
         time.sleep(0.1)

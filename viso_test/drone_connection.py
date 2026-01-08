@@ -15,7 +15,7 @@ class DroneConnection:
 
         return True, DroneConnection(drone)
 
-    def send_odometry(self, x, y, z, q, vx, vy, vz, angular_vx, angular_vy, angular_vz):
+    def send_odometry(self, x, y, z, q, vx, vy, vz, angular_vx, angular_vy, angular_vz, rollspeed, pitchspeed, yawspeed):
         """
         Sends an ODOMETRY MAVLink message.
 
@@ -41,6 +41,9 @@ class DroneConnection:
             angular_vx,         # angular_vx (float, rad/s)
             angular_vy,         # angular_vy (float, rad/s)
             angular_vz,         # angular_vz (float, rad/s)
+            rollspeed,
+            pitchspeed,
+            yawspeed,
             # Start of pose covariance matrix
             [0.0001,  0.0,   0.0,   0.0,   0.0,   0.0] + \
                    [0.0001,  0.0,   0.0,   0.0,   0.0] + \
