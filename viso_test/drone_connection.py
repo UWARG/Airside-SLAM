@@ -26,7 +26,7 @@ class DroneConnection:
         :param vx, vy, vz: Linear velocity in m/s.
         :param angular_vx, angular_vy, angular_vz: Angular velocity in rad/s.
         """
-        frame_id = mavutil.mavlink.MAV_FRAME_VISION_NED
+        frame_id = mavutil.mavlink.MAV_FRAME_LOCAL_NED
         child_frame_id = mavutil.mavlink.MAV_FRAME_BODY_FRD # often used for velocity estimates
 
         time_usec = int(time.time() * 1e6)
