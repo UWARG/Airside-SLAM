@@ -100,9 +100,9 @@ with dai.Pipeline() as p:
                 imuData = imuQueue.tryGet()
                 if imuData is not None:
                     gyro = imuData.packets[-1].gyroscope
-                    angular_vx = -1 * gyro.x
-                    angular_vy = -1 * gyro.y 
-                    angular_vz = gyro.z
+                    angular_vx = gyro.z
+                    angular_vy = gyro.y 
+                    angular_vz = gyro.x
                 else:
                     angular_vx = 0.0
                     angular_vy = 0.0
