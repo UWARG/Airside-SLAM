@@ -8,12 +8,12 @@ from pymavlink import mavutil
 
 class RawImuBridge(Node):
     def __init__(self):
-        #Create Node
-        super().__init__('raw_imu_bridge')
+        # Create Node
+        super().__init__("raw_imu_bridge")
 
-        self.imu_pub = self.create_publisher(Imu, '/imu/data_raw', 50)
+        self.imu_pub = self.create_publisher(Imu, "/imu/data_raw", 50)
 
-        #Connect the Pixhawk
+        # Connect the Pixhawk
         self.port = "/dev/ttyACM0"
         self.baud = 115200
 
@@ -28,9 +28,9 @@ class RawImuBridge(Node):
             self.master.mav.request_data_stream_send(
                 self.master.target_system,
                 self.master.target_component,
-                mavutil.mavlink.MAV_DATA_STREAM_RAW_SENSORS, 
+                mavutil.mavlink.MAV_DATA_STREAM_RAW_SENSORS,
                 50,  # Hz
-                1    # start streaming
+                1,  # start streaming
             )
             self.get_logger().info("Requested RAW_IMU stream (50 Hz)")
 
@@ -40,10 +40,10 @@ class RawImuBridge(Node):
             self.get_logger().error(f"Failed to connect: {e}")
             rclpy.shutdown()
 
-    #Obtain IMU data
+    # Obtain IMU data
     def read_serial(self):
         """Read RAW_IMU messages and publish to ROS topic."""
-        msg = self.master.recv_match(type='RAW_IMU', blocking=False)
+        msg = self.master.recv_match(type="RAW_IMU", blocking=False)
         if not msg:
             return
 

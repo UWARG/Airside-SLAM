@@ -66,3 +66,5 @@ Icon?
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
 .com.apple.*
+
+.venv/
