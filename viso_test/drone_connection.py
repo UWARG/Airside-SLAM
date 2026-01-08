@@ -61,6 +61,25 @@ class DroneConnection:
             mavutil.mavlink.MAV_ESTIMATOR_TYPE_VIO # estimator type
         )
 
+    def send_vision_position_estimate(self, x, y, z, roll, pitch, yaw):
+        """
+        Sends an VISION_POSITION_ESTIMATE MAVLink message.
+
+        :param x, y, z: Position in meters
+        :param roll, pitch, yaw: angles in radians
+        """
+        time_usec = int(time.time() * 1e6)
+
+        self.drone.mav.vision_position_estimate_send(
+            usec=time_usec,
+            x=x,
+            y=y,
+            z=z,
+            roll=roll,
+            pitch=pitch,
+            yaw=yaw
+        )
+
     def init_position(self):
         """
         Function for positions that need to be sent at the start of the script

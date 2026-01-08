@@ -1,9 +1,11 @@
 import time
 import depthai as dai
 import numpy as np
+import math
 
 USE_RERUN = False
 USE_MAVLINK = True
+USE_VISUAL_POSITION = True
 
 if USE_MAVLINK:
     from drone_connection import DroneConnection
@@ -14,6 +16,13 @@ if USE_MAVLINK:
 
 if USE_RERUN:
     from rerun_node import RerunNode
+
+# functions
+def quat_to_euler(qw, qx, qy, qz):
+    roll = math.atan2(2*(qw*qx + qy*qz), 1-2*(qx*qx + qy*qy))
+    pitch = math.asin(2*(qw*qy - qz*qx))
+    yaw = math.atan2(2*(qw*qz + qx*qy), 1-2*(qy*qy + qz*qz))
+    return roll, pitch, yaw
 
 # Create pipeline
 
@@ -92,26 +101,30 @@ with dai.Pipeline() as p:
                 qx = slamData.getQuaternion().qx
                 qy = slamData.getQuaternion().qy
                 qz = slamData.getQuaternion().qz
-                # TODO: Do these please
-                vx = 0.0
-                vy = 0.0
-                vz = 0.0
-
-                imuData = imuQueue.tryGet()
-                if imuData is not None:
-                    gyro = imuData.packets[-1].gyroscope
-                    angular_vx = -gyro.z
-                    angular_vy = -gyro.x
-                    angular_vz = -gyro.y
+                if USE_VISUAL_POSITION:
+                    roll, pitch, yaw = quat_to_euler(qw, qx, qy, qz)
+                    drone_connection.send_vision_position_estimate(x, y, z, roll, pitch, yaw)
                 else:
-                    angular_vx = 0.0
-                    angular_vy = 0.0
-                    angular_vz = 0.0
+                    # TODO: Do these please
+                    vx = 0.0
+                    vy = 0.0
+                    vz = 0.0
 
-                drone_connection.send_odometry(
-                    x, y, z,
-                    [qw, qx, qy, qz],
-                    vx, vy, vz,
-                    angular_vx, angular_vy, angular_vz
-                )
+                    imuData = imuQueue.tryGet()
+                    if imuData is not None:
+                        gyro = imuData.packets[-1].gyroscope
+                        angular_vx = -gyro.z
+                        angular_vy = -gyro.x
+                        angular_vz = -gyro.y
+                    else:
+                        angular_vx = 0.0
+                        angular_vy = 0.0
+                        angular_vz = 0.0
+
+                    drone_connection.send_odometry(
+                        x, y, z,
+                        [qw, qx, qy, qz],
+                        vx, vy, vz,
+                        angular_vx, angular_vy, angular_vz
+                    )
         time.sleep(0.1)
