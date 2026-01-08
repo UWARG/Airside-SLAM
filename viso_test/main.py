@@ -96,24 +96,22 @@ with dai.Pipeline() as p:
                 vx = 0.0
                 vy = 0.0
                 vz = 0.0
-                angular_vx = 0.0
-                angular_vy = 0.0
-                angular_vz = 0.0
 
                 imuData = imuQueue.tryGet()
                 if imuData is not None:
                     gyro = imuData.packets[-1].gyroscope
-                    rollspeed = gyro.x 
-                    pitchspeed = gyro.y 
-                    yawspeed = gyro.z
+                    angular_vx = gyro.x 
+                    angular_vy = gyro.y 
+                    angular_vz = gyro.z
                 else:
-                    rollspeed = yawspeed = pitchspeed = 0
+                    angular_vx = 0.0
+                    angular_vy = 0.0
+                    angular_vz = 0.0
 
                 drone_connection.send_odometry(
                     x, y, z,
                     [qw, qx, qy, qz],
                     vx, vy, vz,
-                    angular_vx, angular_vy, angular_vz,
-                    rollspeed, pitchspeed, yawspeed
+                    angular_vx, angular_vy, angular_vz
                 )
         time.sleep(0.1)
