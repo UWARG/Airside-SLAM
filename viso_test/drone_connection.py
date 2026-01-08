@@ -77,7 +77,34 @@ class DroneConnection:
             z=z,
             roll=roll,
             pitch=pitch,
-            yaw=yaw
+            yaw=yaw,
+            covariance=[0.0001,  0.0,   0.0,   0.0,   0.0,   0.0] + \
+                              [0.0001,  0.0,   0.0,   0.0,   0.0] + \
+                                     [0.0001,  0.0,   0.0,   0.0] + \
+                                            [0.00005, 0.0,   0.0] + \
+                                                   [0.00005, 0.0] + \
+                                                         [0.0001]
+        )
+
+    def send_vision_speed_estimate(self, x, y, z):
+        """
+        Sends an VISION_SPEED_ESTIMATE MAVLink message
+
+        :param x, y, z: speeds in meters/seconds 
+        """
+        time_usec = int(time.time() * 1e6)
+
+        self.drone.mav.vision_speed_estimate_send(
+            usec=time_usec,
+            x=x,
+            y=y,
+            z=z,
+            covariance= [0.0004,  0.0,   0.0,   0.0,   0.0,   0.0] + \
+                               [0.0004,  0.0,   0.0,   0.0,   0.0] + \
+                                      [0.0004,  0.0,   0.0,   0.0] + \
+                                              [0.0002, 0.0,   0.0] + \
+                                                     [0.0002, 0.0] + \
+                                                          [0.0005]
         )
 
     def init_position(self):
