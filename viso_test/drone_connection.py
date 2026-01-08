@@ -26,7 +26,7 @@ class DroneConnection:
         :param vx, vy, vz: Linear velocity in m/s.
         :param angular_vx, angular_vy, angular_vz: Angular velocity in rad/s.
         """
-        frame_id = mavutil.mavlink.MAV_FRAME_LOCAL_NED
+        frame_id = mavutil.mavlink.MAV_FRAME_LOCAL_FRD
         child_frame_id = mavutil.mavlink.MAV_FRAME_BODY_FRD # often used for velocity estimates
 
         time_usec = int(time.time() * 1e6)
@@ -67,14 +67,14 @@ class DroneConnection:
         """
         self.drone.mav.set_gps_global_origin_send(
             target_system=1,
-            latitude=43.5,
-            longitude=80.5,
+            latitude=0,
+            longitude=0,
             altitude=0
         )
         self.drone.mav.set_home_position_send(
             target_system=1,
-            latitude=43.5,
-            longitude=80.5,
+            latitude=0,
+            longitude=0,
             altitude=0,
             x=0,
             y=0,
