@@ -5,7 +5,7 @@ import math
 
 USE_RERUN = False
 USE_MAVLINK = True
-USE_VISUAL_POSITION = True
+USE_VISUAL_POSITION = False
 
 if USE_MAVLINK:
     from drone_connection import DroneConnection
@@ -127,4 +127,4 @@ with dai.Pipeline() as p:
                         vx, vy, vz,
                         angular_vx, angular_vy, angular_vz
                     )
-        time.sleep(0.01)
+        time.sleep(0.05)
