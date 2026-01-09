@@ -95,7 +95,7 @@ with dai.Pipeline() as p:
 
             if USE_MAVLINK:
                 x = -slamData.getTranslation().x
-                y = -slamData.getTranslation().y
+                y = slamData.getTranslation().y
                 z = slamData.getTranslation().z
                 qw = slamData.getQuaternion().qw
                 qx = -slamData.getQuaternion().qx
@@ -114,7 +114,7 @@ with dai.Pipeline() as p:
                     if imuData is not None:
                         gyro = imuData.packets[-1].gyroscope
                         angular_vx = -gyro.z
-                        angular_vy = gyro.x
+                        angular_vy = -gyro.x
                         angular_vz = gyro.y
                     else:
                         angular_vx = 0.0
