@@ -94,9 +94,9 @@ with dai.Pipeline() as p:
             print(slamData.getQuaternion().qx)
 
             if USE_MAVLINK:
-                x = slamData.getTranslation().z
-                y = slamData.getTranslation().x
-                z = slamData.getTranslation().y
+                x = slamData.getTranslation().x
+                y = slamData.getTranslation().y
+                z = slamData.getTranslation().z
                 qw = slamData.getQuaternion().qw
                 qx = slamData.getQuaternion().qx
                 qy = slamData.getQuaternion().qy
