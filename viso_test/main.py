@@ -98,9 +98,9 @@ with dai.Pipeline() as p:
                 y = slamData.getTranslation().x
                 z = slamData.getTranslation().y
                 qw = slamData.getQuaternion().qw
-                qx = slamData.getQuaternion().qz
-                qy = slamData.getQuaternion().qx
-                qz = slamData.getQuaternion().qy
+                qx = slamData.getQuaternion().qx
+                qy = slamData.getQuaternion().qy
+                qz = slamData.getQuaternion().qz
                 if USE_VISUAL_POSITION:
                     roll, pitch, yaw = quat_to_euler(qw, qx, qy, qz)
                     drone_connection.send_vision_position_estimate(x, y, z, roll, pitch, yaw)
