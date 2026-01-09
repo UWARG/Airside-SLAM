@@ -94,16 +94,16 @@ with dai.Pipeline() as p:
             print(slamData.getQuaternion().qx)
 
             if USE_MAVLINK:
-                x = slamData.getTranslation().x
-                y = slamData.getTranslation().y
-                z = slamData.getTranslation().z
+                x = slamData.getTranslation().z
+                y = slamData.getTranslation().x
+                z = slamData.getTranslation().y
                 qw = slamData.getQuaternion().qw
-                qx = slamData.getQuaternion().qx
-                qy = slamData.getQuaternion().qy
-                qz = slamData.getQuaternion().qz
+                qx = slamData.getQuaternion().qz
+                qy = slamData.getQuaternion().qx
+                qz = slamData.getQuaternion().qy
                 if USE_VISUAL_POSITION:
                     roll, pitch, yaw = quat_to_euler(qw, qx, qy, qz)
-                    drone_connection.send_vision_position_estimate(z, x, y, roll, pitch, yaw)
+                    drone_connection.send_vision_position_estimate(x, y, z, roll, pitch, yaw)
                 else:
                     # TODO: Do these please
                     vx = 0.0
