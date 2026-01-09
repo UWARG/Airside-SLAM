@@ -94,12 +94,12 @@ with dai.Pipeline() as p:
             print(slamData.getQuaternion().qx)
 
             if USE_MAVLINK:
-                x = slamData.getTranslation().x
-                y = -slamData.getTranslation().y
+                x = -slamData.getTranslation().x
+                y = slamData.getTranslation().y
                 z = slamData.getTranslation().z
                 qw = slamData.getQuaternion().qw
                 qx = -slamData.getQuaternion().qx
-                qy = -slamData.getQuaternion().qy
+                qy = slamData.getQuaternion().qy
                 qz = slamData.getQuaternion().qz
                 if USE_VISUAL_POSITION:
                     roll, pitch, yaw = quat_to_euler(qw, qx, qy, qz)
