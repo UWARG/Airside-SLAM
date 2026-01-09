@@ -2,18 +2,24 @@ from pymavlink import mavutil
 import time
 
 class DroneConnection:
-    __create_key = object()
-
-    def __init__(self, drone):
-        self.drone = drone
-
-    @classmethod
-    def create(cls, address:str = "/dev/ttyAMA0", baud: int = 57600) -> "tuple[bool, DroneConnection | None]":
-        drone = mavutil.mavlink_connection(address, baud=baud)
-        drone.wait_heartbeat()
+    def __init__(self, address="/dev/ttyAMA0", baud=57600):
+        # Open serial MAVLink connection to Pixhawk
+        self.drone = mavutil.mavlink_connection(address, baud=baud)
+        self.drone.wait_heartbeat()
         print("Heartbeat from drone successfully received")
+        
+    #__create_key = object()
 
-        return DroneConnection(cls.__create_key, drone)
+    #def __init__(self, drone):
+    #    self.drone = drone
+
+    #@classmethod
+    #def create(cls, address:str = "/dev/ttyAMA0", baud: int = 57600) -> "tuple[bool, DroneConnection | None]":
+    #    drone = mavutil.mavlink_connection(address, baud=baud)
+    #    drone.wait_heartbeat()
+    #    print("Heartbeat from drone successfully received")
+    #
+    #    return DroneConnection(cls.__create_key, drone)
 
     def send_odometry(self, x, y, z, q, vx, vy, vz, angular_vx, angular_vy, angular_vz):
         """

@@ -1,6 +1,8 @@
 import time
 import depthai as dai
 import numpy as np
+# Import and create a drone connectio
+from drone_connection import DroneConnection
 
 USE_RERUN = False
 
@@ -57,16 +59,29 @@ with dai.Pipeline() as p:
         slam.obstaclePCL.link(rerunViewer.inputObstaclePCL)
         slam.groundPCL.link(rerunViewer.inputGroundPCL)
 
+    # To make live MavLink connection, to communicate with pixhawk 
+    drone = DroneConnection("/dev/ttyAMA0", baud=57600)
+
     slamQueue = slam.transform.createOutputQueue(maxSize=4, blocking=False)
     p.start()
     while p.isRunning():
         slamData = slamQueue.tryGet()
         if slamData is not None:
-            print("Odom:")
-            print(slamData)
-            print("-----")
-            print(slamData.getTranslation().x)
-            print(slamData.getTranslation().y)
-            print(slamData.getTranslation().z)
-            print(slamData.getQuaternion().qx)
+            t = slamData.getTranslation()
+            q = slamData.getQuaternion()
+            # Example: build values for DroneConnection (no frame conversion yet)
+            x, y, z = t.x, t.y, t.z
+            quat = [q.qw, q.qx, q.qy, q.qz]   # DroneConnection expects [w, x, y, z]
+
+            vx = vy = vz = 0.0               # placeholder
+            avx = avy = avz = 0.0            # placeholder
+
+            drone.send_odometry(x, y, z, quat, vx, vy, vz, avx, avy, avz)
+            #print("Odom:")
+            #print(slamData)
+            #print("-----")
+            #print(slamData.getTranslation().x)
+            #print(slamData.getTranslation().y)
+            #print(slamData.getTranslation().z)
+            #print(slamData.getQuaternion().qx)
         time.sleep(0.1)
