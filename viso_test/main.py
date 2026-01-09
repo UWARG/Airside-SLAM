@@ -127,4 +127,4 @@ with dai.Pipeline() as p:
                         vx, vy, vz,
                         angular_vx, angular_vy, angular_vz
                     )
-        time.sleep(0.1)
+        time.sleep(0.01)
