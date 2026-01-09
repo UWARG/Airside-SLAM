@@ -114,8 +114,8 @@ with dai.Pipeline() as p:
                     if imuData is not None:
                         gyro = imuData.packets[-1].gyroscope
                         angular_vx = -gyro.z
-                        angular_vy = -gyro.x
-                        angular_vz = -gyro.y
+                        angular_vy = gyro.x
+                        angular_vz = gyro.y
                     else:
                         angular_vx = 0.0
                         angular_vy = 0.0
