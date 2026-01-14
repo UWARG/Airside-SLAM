@@ -21,7 +21,7 @@ if USE_RERUN:
 def quat_to_euler(qw, qx, qy, qz):
     roll = math.atan2(2*(qw*qx + qy*qz), 1-2*(qx*qx + qy*qy))
     pitch = math.asin(2*(qw*qy - qz*qx))
-    yaw = math.atan2(2*(qw*qz + qx*qy), 1-2*(qy*qy + qz*qz))
+    yaw = -math.atan2(2*(qw*qz + qx*qy), 1-2*(qy*qy + qz*qz))
     return roll, pitch, yaw
 
 # Create pipeline
