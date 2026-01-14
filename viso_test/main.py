@@ -44,7 +44,7 @@ with dai.Pipeline() as p:
 
     if USE_RERUN:
         rerunViewer = RerunNode()
-    imu.enableIMUSensor([dai.IMUSensor.ACCELEROMETER_RAW, dai.IMUSensor.GYROSCOPE_RAW], 200)
+    imu.enableIMUSensor([dai.IMUSensor.ACCELEROMETER, dai.IMUSensor.GYROSCOPE_CALIBRATED], 200)
     imu.setBatchReportThreshold(1)
     imu.setMaxBatchReports(10)
 
