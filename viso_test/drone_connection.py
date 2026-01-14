@@ -6,6 +6,7 @@ class DroneConnection:
 
     def __init__(self, drone):
         self.drone = drone
+        self.time = time.monotonic()
 
     @classmethod
     def create(cls, address:str = "/dev/ttyAMA0", baud: int = 57600) -> "tuple[bool, DroneConnection | None]":
@@ -29,7 +30,7 @@ class DroneConnection:
         frame_id = mavutil.mavlink.MAV_FRAME_LOCAL_FRD
         child_frame_id = mavutil.mavlink.MAV_FRAME_BODY_FRD # often used for velocity estimates
 
-        time_usec = int(time.time() * 1e6)
+        time_usec = int((time.monotonic() - self.time) * 1e6)
 
         self.drone.mav.odometry_send(
             time_usec,          # time_usec (uint64_t)
@@ -42,20 +43,20 @@ class DroneConnection:
             angular_vy,         # angular_vy (float, rad/s)
             angular_vz,         # angular_vz (float, rad/s)
             # Start of pose covariance matrix
-            [0.0001,  0.0,   0.0,   0.0,   0.0,   0.0] + \
-                   [0.0001,  0.0,   0.0,   0.0,   0.0] + \
-                          [0.0001,  0.0,   0.0,   0.0] + \
-                                 [0.00005, 0.0,   0.0] + \
-                                        [0.00005, 0.0] + \
-                                              [0.0001],
+            [0.01,  0.0,   0.0,   0.0,   0.0,   0.0] + \
+                   [0.01,  0.0,   0.0,   0.0,   0.0] + \
+                          [0.01,  0.0,   0.0,   0.0] + \
+                                 [0.005, 0.0,   0.0] + \
+                                        [0.005, 0.0] + \
+                                              [0.01],
             # End of pose covariance matrix
             # Start of velocity covariance matrix
-            [0.0004,  0.0,   0.0,   0.0,   0.0,   0.0] + \
-                   [0.0004,  0.0,   0.0,   0.0,   0.0] + \
-                          [0.0004,  0.0,   0.0,   0.0] + \
-                                  [0.0002, 0.0,   0.0] + \
-                                         [0.0002, 0.0] + \
-                                              [0.0005],
+            [0.04,  0.0,   0.0,   0.0,   0.0,   0.0] + \
+                   [0.04,  0.0,   0.0,   0.0,   0.0] + \
+                          [0.04,  0.0,   0.0,   0.0] + \
+                                  [0.02, 0.0,   0.0] + \
+                                         [0.02, 0.0] + \
+                                              [0.05],
             # End of velocity covariance matrix
             0,                  # reset_counter (uint8_t, 0 for no reset)
             mavutil.mavlink.MAV_ESTIMATOR_TYPE_VIO # estimator type

@@ -22,13 +22,13 @@ def quat_to_euler(qw, qx, qy, qz):
     roll = math.atan2(2*(qw*qx + qy*qz), 1-2*(qx*qx + qy*qy))
     pitch = math.asin(2*(qw*qy - qz*qx))
     yaw = math.atan2(2*(qw*qz + qx*qy), 1-2*(qy*qy + qz*qz))
-    return roll, pitch, yaw
+    return -roll, pitch, -yaw
 
 # Create pipeline
 
 try:
     with dai.Pipeline() as p:
-        fps = 30
+        fps = 60
         width = 640
         height = 400
         # Define sources and outputs
@@ -89,26 +89,31 @@ try:
                 print("Odom:")
                 #print(slamData)
                 print("-----")
-                print(f"X -> Forward: {slamData.getTranslation().x}")
+                print(f"X -> Forward: {-slamData.getTranslation().x}")
                 print(f"Y -> Right: {slamData.getTranslation().y}")
-                print(f"Z -> Down: {slamData.getTranslation().z}")
+                print(f"Z -> Down: {-slamData.getTranslation().z}")
 
                 if USE_MAVLINK:
                     x = -slamData.getTranslation().x
-                    y = -slamData.getTranslation().y
-                    z = slamData.getTranslation().z
+                    y = slamData.getTranslation().y
+                    z = -slamData.getTranslation().z
                     qw = slamData.getQuaternion().qw
-                    qx = -slamData.getQuaternion().qx
+                    qx = slamData.getQuaternion().qx
                     qy = slamData.getQuaternion().qy
                     qz = slamData.getQuaternion().qz
+                    
+                    roll, pitch, yaw = quat_to_euler(qw, qx, qy, qz)
+                    print("-----")
+                    print(f"Roll -> Right: {roll}")
+                    print(f"Pitch -> Up: {pitch}")
+                    print(f"Yaw -> Right: {yaw}")
+                    
                     if USE_VISUAL_POSITION:
                         roll, pitch, yaw = quat_to_euler(qw, qx, qy, qz)
                         drone_connection.send_vision_position_estimate(x, y, z, roll, pitch, yaw)
                     else:
                         # TODO: Do these please
-                        vx = 0.0
-                        vy = 0.0
-                        vz = 0.0
+                        vx = vy = vz = 0.0
 
                         imuData = imuQueue.tryGet()
                         if imuData is not None:
@@ -117,9 +122,7 @@ try:
                             angular_vy = gyro.x
                             angular_vz = gyro.y
                         else:
-                            angular_vx = 0.0
-                            angular_vy = 0.0
-                            angular_vz = 0.0
+                            angular_vx = angular_vy = angular_vz = 0.0
 
                         drone_connection.send_odometry(
                             x, y, z,
