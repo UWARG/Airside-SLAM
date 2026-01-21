@@ -130,7 +130,7 @@ try:
                             [qw, qx, qy, qz],
                             vx, vy, vz,
                             angular_vx, angular_vy, angular_vz)
-                time.sleep(0.05)
+                time.sleep(0.067)
 except Exception as e:
     print(f"Error: {e}")
     exit(1)
