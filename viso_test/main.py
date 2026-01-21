@@ -86,7 +86,7 @@ try:
 
         while p.isRunning():
             odomData = odomQueue.tryGet()
-            if odomQueue is not None:
+            if odomData is not None:
                 print("Odom:")
                 #print(slamData)
                 print("-----")
