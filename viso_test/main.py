@@ -86,6 +86,7 @@ try:
 
         while p.isRunning():
             odomData = odomQueue.tryGet()
+            imuData = imuQueue.tryGet()
             if odomData is not None:
                 print("Odom:")
                 #print(slamData)
@@ -116,7 +117,6 @@ try:
                         # TODO: Do these please
                         vx = vy = vz = 0.0
 
-                        imuData = imuQueue.tryGet()
                         if imuData is not None:
                             gyro = imuData.packets[-1].gyroscope
                             angular_vx = gyro.z
