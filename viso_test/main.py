@@ -96,7 +96,7 @@ try:
 
                 if USE_MAVLINK:
                     x = -odomData.getTranslation().x
-                    y = odomQueue.getTranslation().y
+                    y = odomData.getTranslation().y
                     z = -odomData.getTranslation().z
                     qw = odomData.getQuaternion().qw
                     qx = odomData.getQuaternion().qx
