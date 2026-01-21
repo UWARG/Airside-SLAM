@@ -76,6 +76,7 @@ try:
             slam.groundPCL.link(rerunViewer.inputGroundPCL)
 
         slamQueue = slam.transform.createOutputQueue(maxSize=4, blocking=False)
+        odomQueue = odom.transform.createOutputQueue(maxSize=4, blocking=False)
         imuQueue = imu.out.createOutputQueue(maxSize=4, blocking=False)
 
         p.start()
@@ -84,23 +85,23 @@ try:
 
 
         while p.isRunning():
-            slamData = slamQueue.tryGet()
-            if slamData is not None:
+            odomData = odomQueue.tryGet()
+            if odomQueue is not None:
                 print("Odom:")
                 #print(slamData)
                 print("-----")
-                print(f"X -> Forward: {-slamData.getTranslation().x}")
-                print(f"Y -> Right: {slamData.getTranslation().y}")
-                print(f"Z -> Down: {-slamData.getTranslation().z}")
+                print(f"X -> Forward: {-odomData.getTranslation().x}")
+                print(f"Y -> Right: {odomData.getTranslation().y}")
+                print(f"Z -> Down: {-odomData.getTranslation().z}")
 
                 if USE_MAVLINK:
-                    x = -slamData.getTranslation().x
-                    y = slamData.getTranslation().y
-                    z = -slamData.getTranslation().z
-                    qw = slamData.getQuaternion().qw
-                    qx = slamData.getQuaternion().qx
-                    qy = slamData.getQuaternion().qy
-                    qz = slamData.getQuaternion().qz
+                    x = -odomData.getTranslation().x
+                    y = odomQueue.getTranslation().y
+                    z = -odomData.getTranslation().z
+                    qw = odomData.getQuaternion().qw
+                    qx = odomData.getQuaternion().qx
+                    qy = odomData.getQuaternion().qy
+                    qz = odomData.getQuaternion().qz
                     
                     roll, pitch, yaw = quat_to_euler(qw, qx, qy, qz)
                     print("-----")
