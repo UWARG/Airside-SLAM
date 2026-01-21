@@ -5,7 +5,7 @@ import math
 
 USE_RERUN = False
 USE_MAVLINK = True
-USE_VISUAL_POSITION = False
+USE_VISUAL_POSITION = True
 
 if USE_MAVLINK:
     from drone_connection import DroneConnection
