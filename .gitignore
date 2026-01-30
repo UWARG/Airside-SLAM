@@ -70,3 +70,4 @@ Icon?
 venv/
 
 .depthai_cached_models/
+.venv/
