@@ -2,4 +2,6 @@ depthai
 numpy
 opencv-python
 pymavlink
-rerun-s
+rerun-sdk
+matplotlib
+open3d

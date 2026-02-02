@@ -198,6 +198,7 @@
 import time
 import depthai as dai
 from rerun_node import RerunNode
+import msvcrt
 
 # Create pipeline
 
@@ -263,6 +264,9 @@ with dai.Pipeline() as p:
     p.start()
     while p.isRunning():
         time.sleep(1)
-        if time.time() - start_time > 5: 
+        print("Still going...")
+        key = msvcrt.getch()
+        if key.lower() == b'q':
+            time.sleep(2.0)
             slam.saveDatabase()
             p.stop()
